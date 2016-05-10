@@ -1,0 +1,6 @@
+/*.log
+/target
+/*-init.clj
+/resources/public/cljs
+/resources/public/js/atlas.js
+out
