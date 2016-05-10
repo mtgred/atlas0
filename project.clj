@@ -1,6 +1,7 @@
 (defproject atlas "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.7.228"]
+                 [http-kit "2.1.18"]
                  [ring "1.4.0"]
                  [bidi "2.0.9"]
                  [reagent "0.5.1"]
@@ -16,14 +17,18 @@
 
   :figwheel {:css-dirs ["resources/public/css"]
              :ring-handler atlas.handler/handler
-             :server-port 2442}
+             :server-port 2443}
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                   [figwheel-sidecar "0.5.2"]]
                    :plugins [[lein-figwheel "0.5.3"]]
                    :source-paths ["src/cljs"]}}
 
-  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
+                 :init-ns atlas.core
+                 :init (-main)}
+
+  :main atlas.core
 
   :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src/cljs"]
