@@ -14,12 +14,18 @@
    [:div
     [link {:href "/"} "Home"]]])
 
-(def pages
-  {:home [home]
-   :about [about]})
+(defn subatlas [name]
+  [:div
+   [:h1 (str "Subatlas " name)]])
+
+(defn get-page [{:keys [handler route-params]}]
+  (case handler
+    :home [home]
+    :about [about]
+    :subatlas [subatlas (:name route-params)]
+    [:div]))
 
 (defn main []
   (let [active-page (subscribe [:active-page])]
-    (if-let [page (pages (:handler @active-page))]
-      page
-      [:div])))
+    (fn []
+      (get-page @active-page))))

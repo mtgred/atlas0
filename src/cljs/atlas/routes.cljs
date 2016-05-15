@@ -4,8 +4,9 @@
             [pushy.core :as pushy]))
 
 (def routes
-  ["/" {""      :home
-        "about" :about}])
+  ["/" {"" :home
+        "about" :about
+        "a/" {[:name] :subatlas}}])
 
 (defn go-to-page [page]
   (dispatch [:go-to-page page]))
