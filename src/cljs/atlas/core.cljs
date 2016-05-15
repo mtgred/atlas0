@@ -10,9 +10,8 @@
   (println "dev mode"))
 
 (defn mount-root []
-  (reagent/render [pages/main-page]
+  (reagent/render [pages/main]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
-  (re-frame/dispatch-sync [:initialize-db])
   (mount-root))

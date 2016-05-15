@@ -7,5 +7,5 @@
 
 (def handler
   (make-handler
-   ["" [["/" index-handler]
+   ["" [[#".*" index-handler]
         ["" (resources {:prefix "public"})]]]))

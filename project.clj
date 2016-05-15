@@ -5,6 +5,7 @@
                  [http-kit "2.1.18"]
                  [ring "1.4.0"]
                  [bidi "2.0.9"]
+                 [kibu/pushy "0.3.6"]
                  [reagent "0.5.1"]
                  [re-frame "0.7.0"]]
 

@@ -1,4 +1,5 @@
 (ns atlas.subs
-    (:require-macros [reagent.ratom :refer [reaction]])
-    (:require [re-frame.core :as re-frame]))
+  (:require-macros [reagent.ratom :refer [reaction]])
+  (:require [re-frame.core :refer [register-sub]]))
 
+(register-sub :active-page (fn [db _] (reaction (:active-page @db))))
