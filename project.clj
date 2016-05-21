@@ -1,7 +1,7 @@
 (defproject atlas "0.1.0-SNAPSHOT"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.7.228"]
-                 [com.datomic/datomic-pro "0.9.5359"]
+                 [com.datomic/datomic-free "0.9.5359"]
                  [http-kit "2.1.18"]
                  [ring "1.4.0"]
                  [bidi "2.0.9"]
@@ -11,9 +11,6 @@
 
   :min-lein-version "2.5.3"
 
-  :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
-                                   :username [:env/datomic_username]
-                                   :password [:env/datomic_password]}}
   :source-paths ["src/clj"]
 
   :plugins [[lein-cljsbuild "1.1.3"]]
