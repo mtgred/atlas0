@@ -20,9 +20,7 @@
 
   :clean-targets ^{:protect false} ["resources/public/cljs" "target"]
 
-  :figwheel {:css-dirs ["resources/public/css"]
-             :ring-handler atlas.handler/handler
-             :server-port 2443}
+  :figwheel {:css-dirs ["resources/public/css"]}
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                   [figwheel-sidecar "0.5.2"]]
