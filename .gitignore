@@ -4,3 +4,5 @@
 /resources/public/cljs
 /resources/public/js/atlas.js
 out
+.lein-repl-history
+.nrepl-port
