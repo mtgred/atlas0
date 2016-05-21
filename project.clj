@@ -29,10 +29,10 @@
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                   [figwheel-sidecar "0.5.3"]]
                    :env {:database-url "datomic:free://localhost:4334/atlas-dev"}
-                   :source-paths ["src/cljs"]}
+                   :source-paths ["src/cljs"]}}
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
-                 :init-ns atlas.core}}
+                 :init-ns atlas.core}
 
   :main atlas.core
 
