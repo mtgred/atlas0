@@ -17,7 +17,8 @@
   (def db-conn (db/init (str "datomic:mem://" (d/squuid))))
 
   (def stop-dev-server
-    (run-server (handler db-conn)
+    (run-server (fn [req]
+                  ((handler db-conn) req))
                 {:port 2442}))
 
   (stop-dev-server)
