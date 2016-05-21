@@ -13,7 +13,9 @@
     (let [u (d/pull db
                     [:user/password :user/email]
                     [:user/username username])
-          p (slurp (:body req))]
+          p (if (:body req)
+              (slurp (:body req))
+              "")]
       (if (sc/verify p (:user/password u))
         (-> (resp/response (:user/email u))
             (resp/status 200))
