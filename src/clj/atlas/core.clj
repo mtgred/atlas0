@@ -27,4 +27,9 @@
 
   (sc/encrypt "password" 16384 8 1)
 
+  ;; $ curl -X POST -d 'password' localhost:2442/api/user/mtgred
+  ;; mtgred@gmail.com
+  ;; $ curl -X POST -d 'passwrd' localhost:2442/api/user/mtgred
+  ;; Unauthorized.
+
   )
