@@ -25,7 +25,7 @@
 (defn handler
   [conn]
   (bidi/make-handler
-    ["/api" {:post
-             {["/user/" :username] (query-user (d/db conn))}}
-     "" [[#".*" index-handler]
-         ["" (bidi/resources {:prefix "public"})]]]))
+    ["/" [["api" {:post
+                  {["/user/" :username] (query-user (d/db conn))}}]
+          ["" (bidi/resources-maybe {:prefix "public/"})]
+          [#".*" index-handler]]]))
