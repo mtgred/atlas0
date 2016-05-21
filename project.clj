@@ -16,7 +16,9 @@
 
   :source-paths ["src/clj"]
 
-  :plugins [[lein-cljsbuild "1.1.3"]]
+  :plugins [[lein-cljsbuild "1.1.3"]
+            [lein-figwheel "0.5.3"]
+            [lein-environ "1.0.3"]]
 
   :clean-targets ^{:protect false} ["resources/public/cljs" "target"]
 
@@ -25,12 +27,12 @@
              :server-port 2443}
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
-                                  [figwheel-sidecar "0.5.2"]]
-                   :plugins [[lein-figwheel "0.5.3"]]
-                   :source-paths ["src/cljs"]}}
+                                  [figwheel-sidecar "0.5.3"]]
+                   :env {:database-url "datomic:free://localhost:4334/atlas-dev"}
+                   :source-paths ["src/cljs"]}
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
-                 :init-ns atlas.core}
+                 :init-ns atlas.core}}
 
   :main atlas.core
 
