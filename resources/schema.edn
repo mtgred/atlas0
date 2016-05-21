@@ -1,34 +1,44 @@
-[
- ;; User
-
- {:db/id #db/id[:db.part/db]
-  :db/ident :user/username
-  :db/valueType :db.type/string
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
-
- {:db/id #db/id[:db.part/db]
-  :db/ident :user/email
-  :db/valueType :db.type/string
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
-
- {:db/id #db/id[:db.part/db]
-  :db/ident :user/password
-  :db/valueType :db.type/string
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
-
- {:db/id #db/id[:db.part/db]
-  :db/ident :user/registration-date
-  :db/valueType :db.type/instant
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
-
- {:db/id #db/id[:db.part/db]
-  :db/ident :user/last-connection
-  :db/valueType :db.type/instant
-  :db/cardinality :db.cardinality/one
-  :db.install/_attribute :db.part/db}
-
- ]
+{:schema.users/basic-id
+ {:txes [[{:db/id #db/id[:db.part/db]
+           :db/ident :user/username
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id[:db.part/db]
+           :db/ident :user/email
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id[:db.part/db]
+           :db/ident :user/password
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}]]}
+ :schema.users/time-tracking
+ {:txes [[{:db/id #db/id[:db.part/db]
+           :db/ident :user/registration-date
+           :db/valueType :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id[:db.part/db]
+           :db/ident :user/last-connection
+           :db/valueType :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}]]}
+ :data.users/devs
+ {:requires [:schema.users/basic-id
+             :schema.users/time-tracking]
+  :txes [[{:db/id #db/id [:db.part/user]
+           :user/username "mtgred"
+           ;; password is "password"
+           :user/password "$s0$e0801$37gTCNd70g3vEumfrn0lVg==$mwAVN6DB12X1ZzXqg+LvpCR3nGAgfPJSWEwlk8cRzXA="
+           :user/email "mtgred@gmail.com"
+           :user/registration-date #inst "2016-05-10"
+           :user/last-connection #inst "2016-05-15T20:28:04+01:00"}
+          {:db/id #db/id [:db.part/user]
+           :user/username "gaverhae"
+           ;; password is "password"
+           :user/password "$s0$e0801$ktnkewvRiLx2w1G7uMMAYQ==$2wdga9XOwsFjZD1IaCQu5glbKcfbJtEyupCVJW7xM8I="
+           :user/email "gary.verhaegen@gmail.com"
+           :user/registration-date #inst "2016-05-21"
+           :user/last-connection #inst "2016-05-21T14:01:52+01:00"}]]}}

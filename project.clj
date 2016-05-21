@@ -2,6 +2,9 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.7.228"]
                  [com.datomic/datomic-free "0.9.5359"]
+                 [io.rkn/conformity "0.4.0"]
+                 [clojurewerkz/scrypt "1.2.0"]
+                 [environ "1.0.3"]
                  [http-kit "2.1.18"]
                  [ring "1.4.0"]
                  [bidi "2.0.9"]
@@ -27,8 +30,7 @@
                    :source-paths ["src/cljs"]}}
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
-                 :init-ns atlas.core
-                 :init (-main)}
+                 :init-ns atlas.core}
 
   :main atlas.core
 

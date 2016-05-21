@@ -5,7 +5,8 @@
 (defn index-handler [request]
   (file-response "index.html" {:root "resources/public"}))
 
-(def handler
+(defn handler
+  [conn]
   (make-handler
    ["" [[#".*" index-handler]
         ["" (resources {:prefix "public"})]]]))
