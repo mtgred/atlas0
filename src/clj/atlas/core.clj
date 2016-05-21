@@ -14,12 +14,13 @@
 (comment
   ;; Start with in-memory db
 
-  (def db-conn (db/init "datomic:mem://atlas"))
+  (def db-conn (db/init (str "datomic:mem://" (d/squuid))))
 
-  (def srv (run-server (handler db-conn)
-                       {:port 2442}))
+  (def stop-dev-server
+    (run-server (handler db-conn)
+                {:port 2442}))
 
-  (.close srv)
+  (stop-dev-server)
 
   (require '[clojurewerkz.scrypt.core :as sc])
 
