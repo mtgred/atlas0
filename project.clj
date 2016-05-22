@@ -5,8 +5,10 @@
                  [io.rkn/conformity "0.4.0"]
                  [clojurewerkz/scrypt "1.2.0"]
                  [environ "1.0.3"]
+                 [ring/ring-json "0.4.0"]
                  [http-kit "2.1.18"]
                  [ring "1.4.0"]
+                 [buddy/buddy-auth "1.0.0"]
                  [bidi "2.0.9"]
                  [kibu/pushy "0.3.6"]
                  [reagent "0.5.1"]
@@ -17,8 +19,7 @@
   :source-paths ["src/clj"]
 
   :plugins [[lein-cljsbuild "1.1.3"]
-            [lein-figwheel "0.5.3"]
-            [lein-environ "1.0.3"]]
+            [lein-figwheel "0.5.3"]]
 
   :clean-targets ^{:protect false} ["resources/public/cljs" "target"]
 
@@ -26,8 +27,9 @@
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                   [figwheel-sidecar "0.5.3"]]
-                   :env {:database-url "datomic:free://localhost:4334/atlas-dev"}
                    :source-paths ["src/clj src/cljs"]}}
+
+  :repl-options {:init-ns atlas.core}
 
   :main atlas.core
 
