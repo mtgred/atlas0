@@ -27,10 +27,9 @@
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
                                   [figwheel-sidecar "0.5.3"]]
-                   :source-paths ["src/cljs"]}}
+                   :source-paths ["src/clj src/cljs"]}}
 
-  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]
-                 :init-ns atlas.core}
+  :repl-options {:init-ns atlas.core}
 
   :main atlas.core
 
