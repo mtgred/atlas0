@@ -2,6 +2,7 @@
   (:require [bidi.ring :as bidi]
             [ring.util.response :as resp]
             [ring.middleware.session :as session]
+            [ring.middleware.json :as json]
             [buddy.auth.middleware :as buddy]
             [buddy.auth.backends.session :as bs]
             [clojurewerkz.scrypt.core :as sc]
@@ -28,20 +29,37 @@
 (defn login
   [db]
   (fn [req]
-    (let [{{:keys [username password]} :body} req]
-      (resp/response (pr-str [username password])))))
+    (let [{{:keys [username password next-url]} :body} req
+          {p :user/password} (d/pull db
+                                     [:user/password]
+                                     [:user/username username])]
+      (if (sc/verify password p)
+        (-> (resp/response [:success])
+            (assoc :session (assoc (:session req) :identity username)))
+        (-> (resp/response [:error])
+            (resp/status 401))))))
 
+(defn print-session
+  [req]
+  (resp/response (:session req)))
 
 (defn base-handler
   [conn]
   (bidi/make-handler
     ["/" [[:post [["login" (login (d/db conn))]]]
+          [:get [["session" print-session]]]
           ["api/" [[:post [[["user/" :username] (query-user (d/db conn))]]]]]
           [:get [["" (bidi/resources-maybe {:prefix "public/"})]
                  [#".*" index-handler]]]]]))
 
+(defn wrap-handler
+  [h]
+  (-> h
+      (buddy/wrap-authentication (bs/session-backend))
+      session/wrap-session
+      (json/wrap-json-body {:keywords? true})
+      json/wrap-json-response))
+
 (defn handler
   [conn]
-  (-> (base-handler conn)
-      (buddy/wrap-authentication (bs/session-backend))
-      session/wrap-session))
+  (wrap-handler (base-handler conn)))
