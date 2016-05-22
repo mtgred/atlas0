@@ -6,10 +6,12 @@
             [atlas.db :as db]))
 
 (defn -main []
-  (let [db-uri (env/env :database-url)
-        db-conn (db/init db-uri)]
-    (println "Atlas server running on port 2442")
-    (run-server (h/handler db-conn) {:port 2442})))
+  (let [db-uri (env/env :database-url "datomic:mem://temp")
+        db-conn (db/init db-uri)
+        port (env/env :port 2442)]
+    (printf "Atlas server running on port %s with db %s\n"
+            port db-uri)
+    (run-server (h/handler db-conn) {:port port})))
 
 (comment
   ;; Start with in-memory db
