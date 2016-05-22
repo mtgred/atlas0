@@ -13,7 +13,9 @@
     (let [u (d/pull db
                     [:user/password :user/email]
                     [:user/username username])
-          p (slurp (:body req))]
+          p (if (:body req)
+              (slurp (:body req))
+              "")]
       (if (sc/verify p (:user/password u))
         (-> (resp/response (:user/email u))
             (resp/status 200))
@@ -23,7 +25,7 @@
 (defn handler
   [conn]
   (bidi/make-handler
-    ["/api" {:post
-             {["/user/" :username] (query-user (d/db conn))}}
-     "" [[#".*" index-handler]
-         ["" (bidi/resources {:prefix "public"})]]]))
+    ["/" [["api" {:post
+                  {["/user/" :username] (query-user (d/db conn))}}]
+          ["" (bidi/resources-maybe {:prefix "public/"})]
+          [#".*" index-handler]]]))
