@@ -1,6 +1,9 @@
 (ns atlas.handler
   (:require [bidi.ring :as bidi]
             [ring.util.response :as resp]
+            [ring.middleware.session :as session]
+            [buddy.auth.middleware :as buddy]
+            [buddy.auth.backends.session :as bs]
             [clojurewerkz.scrypt.core :as sc]
             [datomic.api :as d]))
 
@@ -22,10 +25,23 @@
         (-> (resp/response "Unauthorized.")
             (resp/status 401))))))
 
-(defn handler
+(defn login
+  [db]
+  (fn [req]
+    (let [{{:keys [username password]} :body} req]
+      (resp/response (pr-str [username password])))))
+
+
+(defn base-handler
   [conn]
   (bidi/make-handler
-    ["/" [["api" {:post
-                  {["/user/" :username] (query-user (d/db conn))}}]
-          ["" (bidi/resources-maybe {:prefix "public/"})]
-          [#".*" index-handler]]]))
+    ["/" [[:post [["login" (login (d/db conn))]]]
+          ["api/" [[:post [[["user/" :username] (query-user (d/db conn))]]]]]
+          [:get [["" (bidi/resources-maybe {:prefix "public/"})]
+                 [#".*" index-handler]]]]]))
+
+(defn handler
+  [conn]
+  (-> (base-handler conn)
+      (buddy/wrap-authentication (bs/session-backend))
+      session/wrap-session))

@@ -7,6 +7,7 @@
                  [environ "1.0.3"]
                  [http-kit "2.1.18"]
                  [ring "1.4.0"]
+                 [buddy/buddy-auth "1.0.0"]
                  [bidi "2.0.9"]
                  [kibu/pushy "0.3.6"]
                  [reagent "0.5.1"]
