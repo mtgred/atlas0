@@ -26,7 +26,11 @@
   :figwheel {:css-dirs ["resources/public/css"]}
 
   :profiles {:dev {:dependencies [[com.cemerick/piggieback "0.2.1"]
-                                  [figwheel-sidecar "0.5.3"]]
+                                  [figwheel-sidecar "0.5.3"]
+                                  [peridot "0.4.3"]
+                                  [expectations "2.1.8"]]
+                   :plugins [[lein-autoexpect "1.9.0"]]
+                   :resource-paths ["dev-resources"]
                    :source-paths ["src/clj src/cljs"]}}
 
   :repl-options {:init-ns atlas.core}

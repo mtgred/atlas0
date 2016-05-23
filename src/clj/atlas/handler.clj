@@ -33,7 +33,7 @@
           {p :user/password} (d/pull db
                                      [:user/password]
                                      [:user/username username])]
-      (if (sc/verify password p)
+      (if (and password p (sc/verify password p))
         (-> (resp/response [:success])
             (assoc :session (assoc (:session req) :identity username)))
         (-> (resp/response [:error])
