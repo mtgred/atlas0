@@ -31,7 +31,7 @@
                                   [expectations "2.1.8"]]
                    :plugins [[lein-autoexpect "1.9.0"]]
                    :resource-paths ["dev-resources"]
-                   :source-paths ["src/clj src/cljs"]}}
+                   :source-paths ["src/clj" "src/cljs"]}}
 
   :repl-options {:init-ns atlas.core}
 
