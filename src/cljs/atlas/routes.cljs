@@ -18,6 +18,4 @@
 (pushy/start! history)
 
 (defn goto [url]
-  (fn [e]
-    (.preventDefault e)
-    (pushy/set-token! history url)))
+  (pushy/set-token! history url))

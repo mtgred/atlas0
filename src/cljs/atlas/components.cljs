@@ -4,7 +4,9 @@
 
 (defn link [{:keys [href] :as props} children]
   [:a {:href href
-       :on-click (routes/goto href)}
+       :on-click (fn [e]
+                   (.preventDefault e)
+                   (routes/goto href))}
    children])
 
 (defn atom-input [props state]
