@@ -1,6 +1,10 @@
 (ns atlas.pages
-  (:require [re-frame.core :refer [subscribe]]
-            [atlas.routes :refer [link]]))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [reagent.core :as r]
+            [re-frame.core :refer [subscribe]]
+            [cljs-http.client :as http]
+            [cljs.core.async :refer [<!]]
+            [atlas.components :refer [atom-input link]]))
 
 (defn home []
   [:div
@@ -18,10 +22,33 @@
   [:div
    [:h1 (str "Subatlas " name)]])
 
+(defn login []
+  (let [username (r/atom "")
+        password (r/atom "")]
+    (fn []
+     [:div
+      [:h1 "Login"]
+      [:form {:on-submit (fn [e]
+                           (.preventDefault e)
+                           (go (let [resp (<! (http/post "/login"
+                                                         {:json-params {:username @username
+                                                                        :password @password}}))]
+                                 (prn resp))))}
+       [:p
+        [:label "Username"]]
+       [:p
+        [atom-input {:type "text"} username]]
+       [:p
+        [:label "Password"]]
+       [:p
+        [atom-input {:type "password"} password]]
+       [:button "Login"]]])))
+
 (defn get-page [{:keys [handler route-params]}]
   (case handler
     :home [home]
     :about [about]
+    :login [login]
     :subatlas [subatlas (:name route-params)]
     [:div]))
 
