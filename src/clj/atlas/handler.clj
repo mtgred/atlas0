@@ -34,7 +34,7 @@
                                      [:user/password]
                                      [:user/username username])]
       (if (sc/verify password p)
-        (-> (resp/response [:success])
+        (-> (resp/response [:success {:user/username username}])
             (assoc :session (assoc (:session req) :identity username)))
         (-> (resp/response [:error])
             (resp/status 401))))))
