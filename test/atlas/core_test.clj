@@ -105,4 +105,4 @@
                                                         :password "password"}))
                 (p/request "/api/activities")
                 :response
-                (update :body #(-> % slurp (json/parse-string true))))))
+                (update :body #(-> % (json/parse-string true))))))
