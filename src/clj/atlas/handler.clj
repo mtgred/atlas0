@@ -70,6 +70,20 @@
         (-> (resp/response [:error "Missing fields."])
             (resp/status 400))))))
 
+(defn query-interests
+  [db req]
+  (if-let [id (:identity req)]
+    (let [interests (-> (d/q '[:find (pull ?act [:interest/name])
+                               :in $ ?id
+                               :where
+                               [?e :user/username ?id]
+                               [?e :user.interested-in/interests ?act]]
+                             db id)
+                        vec first)]
+      (-> (resp/response interests)))
+    (-> (resp/response [:error])
+        (resp/status 401))))
+
 (defn print-session
   [req]
   (resp/response (:session req)))
@@ -81,7 +95,8 @@
                   ["register" #(register conn %)]]]
           [:get [["session" print-session]
                  ["logout" logout]]]
-          ["api/" [[:post [[["user/" :username] #(query-user (d/db conn) %)]]]]]
+          ["api/" [[:post [[["user/" :username] #(query-user (d/db conn) %)]]]
+                   ["interests" #(query-interests (d/db conn) %)]]]
           [:get [["" (bidi/resources-maybe {:prefix "public/"})]
                  [#".*" index-handler]]]]]))
 
