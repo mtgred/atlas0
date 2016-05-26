@@ -10,6 +10,7 @@
                  [ring "1.4.0"]
                  [buddy/buddy-auth "1.0.0"]
                  [bidi "2.0.9"]
+                 [compojure "1.5.0"]
                  [kibu/pushy "0.3.6"]
                  [reagent "0.5.1"]
                  [re-frame "0.7.0"]]

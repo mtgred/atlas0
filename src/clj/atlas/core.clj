@@ -27,7 +27,4 @@
 
   (stop-dev-server)
 
-  (require '[clojurewerkz.scrypt.core :as sc])
-
-  (sc/encrypt "password" 16384 8 1)
   )
