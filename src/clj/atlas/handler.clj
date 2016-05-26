@@ -71,6 +71,20 @@
         (-> (resp/response [:error "Missing fields."])
             (resp/status 400))))))
 
+(defn query-interests
+  [db req]
+  (if-let [id (:identity req)]
+    (let [interests (-> (d/q '[:find (pull ?act [:interest/name])
+                               :in $ ?id
+                               :where
+                               [?e :user/username ?id]
+                               [?e :user.interested-in/interests ?act]]
+                             db id)
+                        vec first)]
+      (-> (resp/response interests)))
+    (-> (resp/response [:error])
+        (resp/status 401))))
+
 (defn print-session
   [req]
   (resp/response (:session req)))
@@ -84,7 +98,8 @@
       (cj/GET "/session" req (print-session req))
       (cj/GET "/logout" req (logout req)))
     (cj/routes
-      (cj/POST "/api/user/:username" req (query-user (d/db conn) req)))
+      (cj/POST "/api/user/:username" req (query-user (d/db conn) req))
+      (cj/GET "/api/interests" req (query-interests (d/db conn) req)))
     (cj/routes
       (route/resources "/" {:root "public/"})
       (route/not-found (index-handler)))))

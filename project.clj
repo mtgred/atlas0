@@ -13,7 +13,8 @@
                  [compojure "1.5.0"]
                  [kibu/pushy "0.3.6"]
                  [reagent "0.5.1"]
-                 [re-frame "0.7.0"]]
+                 [re-frame "0.7.0"]
+                 [cljs-http "0.1.40"]]
 
   :min-lein-version "2.5.3"
 
