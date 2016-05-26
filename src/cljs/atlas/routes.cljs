@@ -6,6 +6,7 @@
 (def routes
   ["/" {"" :home
         "about" :about
+        "login" :login
         "a/" {[:name] :subatlas}}])
 
 (defn go-to-page [page]
@@ -17,11 +18,4 @@
 (pushy/start! history)
 
 (defn goto [url]
-  (fn [e]
-    (.preventDefault e)
-    (pushy/set-token! history url)))
-
-(defn link [{:keys [href] :as props} children]
-  [:a {:href href
-       :on-click (goto href)}
-   children])
+  (pushy/set-token! history url))
