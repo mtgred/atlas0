@@ -39,6 +39,21 @@
         (-> (resp/response [:error])
             (resp/status 401))))))
 
+(defn query-interests
+  [db]
+  (fn [req]
+    (if-let [id (:identity req)]
+      (let [interests (-> (d/q '[:find (pull ?act [:interest/name])
+                                  :in $ ?id
+                                  :where
+                                  [?e :user/username ?id]
+                                  [?e :user.interested-in/interests ?act]]
+                                db id)
+                           vec first)]
+        (-> (resp/response interests)))
+      (-> (resp/response [:error])
+          (resp/status 401)))))
+
 (defn print-session
   [req]
   (resp/response (:session req)))
@@ -48,7 +63,8 @@
   (bidi/make-handler
     ["/" [[:post [["login" (login (d/db conn))]]]
           [:get [["session" print-session]]]
-          ["api/" [[:post [[["user/" :username] (query-user (d/db conn))]]]]]
+          ["api/" [[:post [[["user/" :username] (query-user (d/db conn))]]]
+                   ["interests" (query-interests (d/db conn))]]]
           [:get [["" (bidi/resources-maybe {:prefix "public/"})]
                  [#".*" index-handler]]]]]))
 
