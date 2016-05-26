@@ -5,10 +5,10 @@
             [atlas.db :as db]
             [atlas.handler :as h]))
 
-(let [counter (atom 0)]
-  (defn test-app
-    []
-    (->> (swap! counter inc) (str "datomic:mem://") db/init h/handler)))
+(defn test-app
+  []
+  (->> (datomic.api/squuid)
+       (str "datomic:mem://") db/init h/handler))
 
 (expect string?
         (-> (p/session (test-app))
