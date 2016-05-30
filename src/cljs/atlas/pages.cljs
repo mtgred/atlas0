@@ -1,11 +1,11 @@
 (ns atlas.pages
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [reagent.core :as r]
-            [re-frame.core :refer [subscribe]]
+            [re-frame.core :refer [subscribe dispatch]]
             [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [atlas.routes :as routes]
-            [atlas.components :refer [atom-input link]]))
+            [atlas.components :refer [atom-input link user-view navbar]]))
 
 (defn home []
   [:div
@@ -36,7 +36,8 @@
                                                          {:json-params {:username @username
                                                                         :password @password}}))]
                                  (if (:success resp)
-                                   (routes/goto "/")
+                                   (do (dispatch [:set-data :current-user (:body resp)])
+                                       (routes/goto "/"))
                                    (reset! error-msg "Invalid login or password")))))}
        [:p
         [:label "Username"]]
@@ -61,4 +62,6 @@
 (defn main []
   (let [active-page (subscribe [:active-page])]
     (fn []
-      (get-page @active-page))))
+      [:div
+       [navbar]
+       (get-page @active-page)])))

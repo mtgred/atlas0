@@ -6,7 +6,8 @@
             [buddy.auth.middleware :as buddy]
             [buddy.auth.backends.session :as bs]
             [clojurewerkz.scrypt.core :as sc]
-            [datomic.api :as d]))
+            [datomic.api :as d]
+            [atlas.utils :as utils]))
 
 (defn index-handler [request]
   (resp/file-response "index.html" {:root "resources/public"}))
@@ -27,11 +28,12 @@
 (defn login
   [db req]
   (let [{{:keys [username password next-url]} :body} req
-        {p :user/password} (d/pull db
-                                   [:user/password]
-                                   [:user/username username])]
+        {p :user/password email :user/email} (d/pull db
+                                                     [:user/password]
+                                                     [:user/username username])]
     (if (and password p (sc/verify password p))
-      (-> (resp/response [:success])
+      (-> (resp/response {:username username
+                          :email-hash (utils/md5 email)})
           (assoc :session (assoc (:session req) :identity username)))
       (-> (resp/response [:error "Unauthorized."])
           (resp/status 401)))))
