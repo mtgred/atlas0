@@ -29,7 +29,7 @@
   [db req]
   (let [{{:keys [username password next-url]} :body} req
         {p :user/password email :user/email} (d/pull db
-                                                     [:user/password]
+                                                     [:user/password :user/email]
                                                      [:user/username username])]
     (if (and password p (sc/verify password p))
       (-> (resp/response {:username username
