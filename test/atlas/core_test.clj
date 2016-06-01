@@ -3,7 +3,8 @@
             [peridot.core :as p]
             [cheshire.core :as json]
             [atlas.db :as db]
-            [atlas.handler :as h]))
+            [atlas.handler :as h]
+            [atlas.utils :as utils]))
 
 (defn test-app
   []
@@ -74,7 +75,8 @@
                            :body (json/generate-string {:garbage true}))
                 :response)))
 
-(expect {:body (json/generate-string [:success])
+(expect {:body (json/generate-string {:username "mtgred"
+                                      :email-hash (utils/md5 "mtgred@gmail.com")})
          :status 200}
         (in (-> (p/session (test-app))
                 (p/request "/login"
@@ -119,6 +121,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 :response)))
 
@@ -129,6 +132,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 :response)))
 
@@ -139,6 +143,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/session")
                 :response)))
@@ -150,6 +155,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/logout")
                 (p/request "/login"
@@ -166,6 +172,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/logout")
                 (p/request "/session")
@@ -178,6 +185,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/logout")
                 (p/request "/login"
@@ -189,12 +197,14 @@
                 :response)))
 
 (expect {:status 200
-         :body (json/generate-string [:success])}
+         :body (json/generate-string {:username "new-user"
+                                      :email-hash (utils/md5 "user@example.com")})}
         (in (-> (p/session (test-app))
                 (p/request "/register"
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/logout")
                 (p/request "/login"
@@ -211,6 +221,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "new-user"
+                                                        :email "user@example.com"
                                                         :password "monkey"}))
                 (p/request "/logout")
                 (p/request "/login"
@@ -228,6 +239,7 @@
                            :request-method :post
                            :content-type "application/json; charset=utf-8"
                            :body (json/generate-string {:username "mtgred"
+                                                        :email "user@example.com"
                                                         :password "password"}))
                 :response)))
 
