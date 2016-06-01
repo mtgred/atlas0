@@ -53,12 +53,14 @@
     (-> (resp/response [:error "Already logged in."])
         (resp/status 403))
     (let [desired-username (get-in req [:body :username])
-          desired-password (get-in req [:body :password])]
-      (if (and desired-password desired-username)
+          desired-password (get-in req [:body :password])
+          email            (get-in req [:body :email])]
+      (if (and desired-password desired-username email)
         (let [now (java.util.Date.)
               tx-result (d/transact conn
                                     [{:db/id #db/id [:db.part/user]
                                       :user/username desired-username
+                                      :user/email email
                                       :user/password (hash-password desired-password)
                                       :user/registration-date now
                                       :user/last-connection now}])]
