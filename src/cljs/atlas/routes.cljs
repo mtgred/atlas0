@@ -6,6 +6,7 @@
 (def routes
   ["/" {"" :home
         "about" :about
+        "register" :register
         "login" :login
         "a/" {[:name] :subatlas}}])
 

@@ -23,6 +23,40 @@
   [:div
    [:h1 (str "Subatlas " name)]])
 
+(defn register []
+  (let [username (r/atom "")
+        email (r/atom "")
+        password (r/atom "")
+        error-msg (r/atom "")]
+    (fn []
+     [:div
+      [:h1 "Create a new account"]
+      [:form {:on-submit (fn [e]
+                           (.preventDefault e)
+                           (go (let [resp (<! (http/post "/register"
+                                                         {:json-params {:username @username
+                                                                        :email @email
+                                                                        :password @password}}))]
+                                 (if (:success resp)
+                                   (do (dispatch [:set-data :current-user (:body resp)])
+                                       (routes/goto "/"))
+                                   (reset! error-msg (second (:body resp)))))))}
+       [:p
+        [:label "Username"]]
+       [:p
+        [atom-input {:type "text"} username]]
+       [:p
+        [:label "Email"]]
+       [:p
+        [atom-input {:type "email"} email]]
+       [:p
+        [:label "Password"]]
+       [:p
+        [atom-input {:type "password"} password]]
+       [:button "Login"]
+       (when-not (empty? @error-msg)
+         [:p @error-msg])]])))
+
 (defn login []
   (let [username (r/atom "")
         password (r/atom "")
@@ -55,6 +89,7 @@
   (case handler
     :home [home]
     :about [about]
+    :register [register]
     :login [login]
     :subatlas [subatlas (:name route-params)]
     [:div]))
