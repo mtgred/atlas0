@@ -2,7 +2,23 @@
 
 ## Development Mode
 
-### Run application:
+
+### CSS compilation
+
+Install Stylus
+
+```
+npm install stylus -g
+```
+
+Compile and watch the Stylus files
+
+```
+stylus -w src/css -o resources/public/css
+```
+
+
+### Run application
 
 ```
 lein figwheel

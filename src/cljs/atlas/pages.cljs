@@ -8,19 +8,17 @@
             [atlas.components :refer [atom-input link user-view navbar]]))
 
 (defn home []
-  [:div
+  [:div.container
    [:h1 "Home page"]
    [:div
     [link {:href "/about"} "About"]]])
 
 (defn about []
-  [:div
-   [:h1 "About page"]
-   [:div
-    [link {:href "/"} "Home"]]])
+  [:div.container
+   [:h1 "About page"]])
 
 (defn subatlas [name]
-  [:div
+  [:div.container
    [:h1 (str "Subatlas " name)]])
 
 (defn register []
@@ -29,7 +27,7 @@
         password (r/atom "")
         error-msg (r/atom "")]
     (fn []
-     [:div
+     [:div.container
       [:h1 "Create a new account"]
       [:form {:on-submit (fn [e]
                            (.preventDefault e)
@@ -62,7 +60,7 @@
         password (r/atom "")
         error-msg (r/atom "")]
     (fn []
-     [:div
+     [:div.container
       [:h1 "Login"]
       [:form {:on-submit (fn [e]
                            (.preventDefault e)
