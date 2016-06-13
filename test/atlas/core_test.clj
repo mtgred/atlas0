@@ -243,14 +243,3 @@
                                                         :password "password"}))
                 :response)))
 
-(expect {:status 200
-         :body [{:interest/name "netrunner"}]}
-        (in (-> (p/session (test-app))
-                (p/request "/login"
-                           :request-method :post
-                           :content-type "application/json; charset=utf-8"
-                           :body (json/generate-string {:username "mtgred"
-                                                        :password "password"}))
-                (p/request "/api/interests")
-                :response
-                (update :body #(-> % (json/parse-string true))))))
