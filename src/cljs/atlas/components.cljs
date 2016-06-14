@@ -19,7 +19,7 @@
                  :on-change #(reset! state (-> % .-target .-value)))])
 
 (defn user-view
-  ([user] (user-view user 32))
+  ([user] (user-view user 28))
   ([{:keys [username email-hash] :as user} size]
    [:div
     [:img.avatar {:src (str "http://www.gravatar.com/avatar/" email-hash "?d=retro&s=" size)}]
