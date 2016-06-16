@@ -1,9 +1,27 @@
-{:schema.users/basic-id
+{:schema.channels/basics
+ {:txes [[{:db/id #db/id[:db.part/db]
+           :db/ident :channel/name
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db/unique :db.unique/value
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :channel/description
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}]]}
+
+ :schema.users/basics
  {:txes [[{:db/id #db/id[:db.part/db]
            :db/ident :user/username
            :db/valueType :db.type/string
            :db/cardinality :db.cardinality/one
            :db/unique :db.unique/value
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id[:db.part/db]
+           :db/ident :user/name
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
            :db.install/_attribute :db.part/db}
           {:db/id #db/id[:db.part/db]
            :db/ident :user/email
@@ -14,9 +32,8 @@
            :db/ident :user/password
            :db/valueType :db.type/string
            :db/cardinality :db.cardinality/one
-           :db.install/_attribute :db.part/db}]]}
- :schema.users/time-tracking
- {:txes [[{:db/id #db/id[:db.part/db]
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id[:db.part/db]
            :db/ident :user/registration-date
            :db/valueType :db.type/instant
            :db/cardinality :db.cardinality/one
@@ -25,13 +42,45 @@
            :db/ident :user/last-connection
            :db/valueType :db.type/instant
            :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :user/channels
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/many
            :db.install/_attribute :db.part/db}]]}
- :schema.events/basics
- {:txes [[{:db/id #db/id [:db.part/db]
-           :db/ident :interest/name
+
+ :schema.messages/basics
+ {:txes [[{:db/id #db/id[:db.part/db]
+           :db/ident :message/user
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :message/message
            :db/valueType :db.type/string
            :db/cardinality :db.cardinality/one
-           :db/unique :db.unique/identity
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :message/date
+           :db/valueType :db.type/instant
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :message/channel
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :message/event
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}]]}
+
+ :schema.events/basics
+ {:txes [[{:db/id #db/id [:db.part/db]
+           :db/ident :event/channels
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/many
            :db.install/_attribute :db.part/db}
           {:db/id #db/id [:db.part/db]
            :db/ident :event/name
@@ -39,13 +88,7 @@
            :db/cardinality :db.cardinality/one
            :db.install/_attribute :db.part/db}
           {:db/id #db/id [:db.part/db]
-           :db/ident :event/interests
-           :db/valueType :db.type/ref
-           :db/cardinality :db.cardinality/many
-           :db.install/_attribute :db.part/db}
-          {:db/id #db/id [:db.part/db]
-           :db/ident :event/location
-           :db/doc "A GPS location encoded as a pr-str vector of 2 floats."
+           :db/ident :event/description
            :db/valueType :db.type/string
            :db/cardinality :db.cardinality/one
            :db.install/_attribute :db.part/db}
@@ -60,20 +103,58 @@
            :db/cardinality :db.cardinality/one
            :db.install/_attribute :db.part/db}
           {:db/id #db/id [:db.part/db]
-           :db/ident :user.interested-in/interests
+           :db/ident :event/address
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :event/place
+           :db/valueType :db.type/ref
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :event/price
+           :db/valueType :db.type/float
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :event/price-currency
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}]]}
+
+ :schema.places/basics
+ {:txes [[{:db/id #db/id [:db.part/db]
+           :db/ident :place/channels
            :db/valueType :db.type/ref
            :db/cardinality :db.cardinality/many
            :db.install/_attribute :db.part/db}
           {:db/id #db/id [:db.part/db]
-           :db/ident :user.interested-in/events
-           :db/valueType :db.type/ref
-           :db/cardinality :db.cardinality/many
+           :db/ident :place/name
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :place/description
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :place/address
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
+           :db.install/_attribute :db.part/db}
+          {:db/id #db/id [:db.part/db]
+           :db/ident :place/phone
+           :db/valueType :db.type/string
+           :db/cardinality :db.cardinality/one
            :db.install/_attribute :db.part/db}]]}
- :data.users/devs
- {:requires [:schema.users/basic-id
-             :schema.users/time-tracking]
+
+ :data.users/seed
+ {:requires [:schema.users/basics]
   :txes [[{:db/id #db/id [:db.part/user]
            :user/username "mtgred"
+           :user/name "Minh Tran"
            ;; password is "password"
            :user/password "$s0$e0801$37gTCNd70g3vEumfrn0lVg==$mwAVN6DB12X1ZzXqg+LvpCR3nGAgfPJSWEwlk8cRzXA="
            :user/email "mtgred@gmail.com"
@@ -81,22 +162,58 @@
            :user/last-connection #inst "2016-05-15T20:28:04+01:00"}
           {:db/id #db/id [:db.part/user]
            :user/username "gaverhae"
+           :user/name "Gary Verhaegen"
            ;; password is "password"
            :user/password "$s0$e0801$ktnkewvRiLx2w1G7uMMAYQ==$2wdga9XOwsFjZD1IaCQu5glbKcfbJtEyupCVJW7xM8I="
            :user/email "gary.verhaegen@gmail.com"
            :user/registration-date #inst "2016-05-21"
            :user/last-connection #inst "2016-05-21T14:01:52+01:00"}]]}
- :data.interests/init
- {:requires [:schema.events/basics
-             :data.users/devs]
-  :txes [[{:db/id #db/id [:db.part/user -1]
-           :interest/name "netrunner"}
-          {:db/id #db/id [:db.part/user -2]
-           :event/name "Big Netrunner sale!"
-           :event/interests #db/id [:db.part/user -1]
-           :event/location "[51.456252 -0.973414]"
-           :event/start-time #inst "2016-05-25T08:00:00+01:00"
-           :event/end-time #inst "2016-05-25T20:00:00+01:00"}
-          {:db/id [:user/username "mtgred"]
-           :user.interested-in/interests #db/id [:db.part/user -1]
-           :user.interested-in/events #db/id [:db.part/user -2]}]]}}
+
+ :data.atlas/seed
+ {:requires [:schema.channels/basics]
+  :txes [[{:db/id #db/id [:db.part/user -10]
+           :channel/name "Netrunner"
+           :channel/description "Android: Netrunner, Living Card Game"}
+          {:db/id #db/id [:db.part/user -11]
+           :channel/name "MTG"
+           :channel/description "Magig: the Gathering, Collectible Card Game"}
+          {:db/id #db/id [:db.part/user -12]
+           :channel/name "Clojure"
+           :channel/description "Clojure, programming language"}
+          {:db/id #db/id [:db.part/user -13]
+           :channel/name "Climbing"
+           :channel/description "Rock Climbing, sport"}
+          {:db/id #db/id [:db.part/user -14]
+           :channel/name "LindyHop"
+           :channel/description "Swing dance"}
+          {:db/id #db/id [:db.part/user -15]
+           :channel/name "ULB"
+           :channel/description "Université libre de Bruxelles"}
+          {:db/id #db/id [:db.part/user -16]
+           :channel/name "Startup"
+           :channel/description "Startup community"}
+
+          {:db/id #db/id [:db.part/user -20]
+           :place/name "Outpost Brussels"
+           :place/description "Game shop large play area."
+           :place/address "Rue de la Tribune 8, 1000 Brussels, Belgium"
+           :place/phone "+3222180400"
+           :place/channels [#db/id [:db.part/user -10]
+                            #db/id [:db.part/user -11]]}
+          {:db/id #db/id [:db.part/user -21]
+           :place/name "Jefke"
+           :place/description "Main building where the student parties are orgnized"
+           :place/channels #db/id [:db.part/user -14]}
+
+          {:db/id #db/id [:db.part/user -30]
+           :event/name "Netrunner Regional Championship"
+           :event/description "The Outpost Brussels is happy to announce his Netrunner Regional Championship Tournament :)!
+Regional Championships are a Premier Event that will give you exclusive prizing and a chance to earn a precious first-round bye for the National Championship which will then qualify you to World Championship Weekend in November. 
+It will be an unique occasion to come and test new decks while having fun in a relaxed atmosphere ;)!"
+           :event/start-time #inst "2016-06-26T12:00:00+01:00"
+           :event/channels #db/id [:db.part/user -10]
+           :event/place #db/id [:db.part/user -20]
+           :event/price 12.0
+           :event/price-currency "EUR"}
+          ]]}
+ }
